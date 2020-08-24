@@ -10,7 +10,6 @@ class Request:
 		self.el_key = etree.SubElement(self.el_ticket, 'Key')
 		self.el_key.text = key
 		self.el_fbimsgsrq = etree.SubElement(self.el_fbixml, 'FbiMsgsRq')
-
 class Login(Request):
 	def __init__(self, username, password, key=""):
 		Request.__init__(self, key)
@@ -79,5 +78,17 @@ class GetPOList(Request):
 		self.el_getpolistrq = etree.SubElement(self.el_fbimsgsrq, 'GetPOListRq')
 		self.el_locationgroup = etree.SubElement(self.el_getpolistrq, 'LocationGroup')
 		self.el_locationgroup.text = locationgroup
+		xmlmsg = etree.tostring(self.el_fbixml, pretty_print=True)
+		self.request = xmlmsg
+
+class ExecuteQuery(Request):
+	def __init__(self, name, key=""):
+		Request.__init__(self, key)
+		if key == '':
+			raise TypeError("An API key was not provided (not enough aruments for " + 
+				            self.__class__.__name__ + " request)")
+		self.el_executequeryrq = etree.SubElement(self.el_fbimsgsrq, 'ExecuteQueryRq')
+		self.el_name = etree.SubElement(self.el_executequeryrq, 'Name')
+		self.el_name.text = name
 		xmlmsg = etree.tostring(self.el_fbixml, pretty_print=True)
 		self.request = xmlmsg	

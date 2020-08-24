@@ -4,6 +4,7 @@ import socket
 import struct
 import hashlib
 import datetime
+import base64
 from lxml import etree
 
 import xmlrequests
@@ -21,7 +22,7 @@ class Fishbowlapi:
 		self.host = host
 		self.port = port
 		self.username = username
-		self.password = hashlib.md5(password).digest().encode('base64').replace('\n', "")
+		self.password = base64.b64encode(hashlib.md5(password.encode()).digest())
 		# connect and login
 		self.login()
 	# below are methods used to login/generate requests
@@ -41,10 +42,10 @@ class Fishbowlapi:
 			try:
 				byte = self.stream.recv(1)
 				byte_count += 1
-				msg_received += byte
+				msg_received += byte.decode('utf-8')
 			except socket.timeout:
 				self.status = "Error: Connection Timeout"
-				print self.status
+				print(self.status)
 				break
 		return msg_received
 	def updatestatus(self, statuscode, status=""):
@@ -78,7 +79,7 @@ class Fishbowlapi:
 		""" Method for adding inventory to Fishbowl """
 		# create XML request
 		xml = xmlrequests.AddInventory(str(partnum), str(qty), str(uomid),
-			                           str(cost), str(loctagnum), key=self.key).request
+						   str(cost), str(loctagnum), key=self.key).request
 		# send request to fishbowl server
 		self.stream.send(msg(xml))
 		# get server response
@@ -94,8 +95,8 @@ class Fishbowlapi:
 					if log == True:
 						f = open('api_log.txt', 'a')
 						string_to_log = ("add_inv" + ',' + str(datetime.now()) + ',' + str(partnum) + ',' + 
-							             str(qty) + ',' + str(uomid) +
-							             str(cost) + ',' + str(loctagnum) + '\n')
+								     str(qty) + ',' + str(uomid) +
+								     str(cost) + ',' + str(loctagnum) + '\n')
 						f.write(string_to_log)
 						f.close()
 	def cycle_inventory(self, partnum, qty, locationid, log=False):
@@ -106,7 +107,7 @@ class Fishbowlapi:
 		self.stream.send(msg(xml))
 		# get server response
 		self.response = self.get_response()
-		print self.response
+		print(self.response)
 		# parse xml, check status
 		for element in xmlparse(self.response).iter():
 			if element.tag == 'CycleCountRs':
@@ -118,7 +119,7 @@ class Fishbowlapi:
 					if log == True:
 						f = open('api_log.txt', 'a')
 						string_to_log = ("cycle_inv" + ',' + str(datetime.now()) + ',' + str(partnum) + ',' +
-							             str(qty) + ',' + str(locationid) + '\n')
+								     str(qty) + ',' + str(locationid) + '\n')
 						f.write(string_to_log)
 						f.close()
 	def get_po_list(self, locationgroup):
@@ -126,7 +127,13 @@ class Fishbowlapi:
 		xml = xmlrequests.GetPOList(str(locationgroup), key=self.key).request
 		self.stream.send(msg(xml))
 		self.response = self.get_response()
-		print self.response
+		print(self.response)
+		return self.response
+	def execute_query(self, name):
+		""" Execute a Data query"""
+		xml = xmlrequests.ExecuteQuery(str(name), key=self.key).request
+		self.stream.send(msg(xml))
+		self.response = self.get_response()
 		return self.response
 
 # global functions
@@ -144,5 +151,8 @@ def msg(msg):
 	return msg_to_send
 
 # for testing:
-# stream = Fishbowlapi('admin', 'admin', '10.0.2.2')
-# stream.get_po_list('SLC')
+stream = Fishbowlapi('admin', "password", '127.0.0.1')
+dataReturn = stream.execute_query('DashboardTest')
+with open('export_7.csv', 'w', newline='') as exportFile:
+	for line in xmlparse(dataReturn)[1][0][0]:
+		exportFile.write(line.text + "\r\n")
