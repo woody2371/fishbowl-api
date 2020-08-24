@@ -57,7 +57,7 @@ class CycleCount(Request):
 	def __init__(self, partnum, qty, locationid, tracking="", key=""):
 		Request.__init__(self, key)
 		if key == '':
-			raise TypeError("An API key was not provided (not enough aruments for " + 
+			raise TypeError("An API key was not provided (not enough arguments for " + 
 				            self.__class__.__name__ + " request)")
 		self.el_cyclecountrq = etree.SubElement(self.el_fbimsgsrq, 'CycleCountRq')
 		self.el_partnum = etree.SubElement(self.el_cyclecountrq, 'PartNum')
