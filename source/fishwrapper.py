@@ -5,6 +5,7 @@ import struct
 import hashlib
 import datetime
 import base64
+import config as cfg
 from lxml import etree
 
 import xmlrequests
@@ -151,8 +152,8 @@ def msg(msg):
 	return msg_to_send
 
 # for testing:
-stream = Fishbowlapi('admin', "password", '127.0.0.1')
-dataReturn = stream.execute_query('DashboardTest')
-with open('export_7.csv', 'w', newline='') as exportFile:
+stream = Fishbowlapi(cfg.fb['user'], cfg.fb['passwd'], cfg.fb['host'])
+dataReturn = stream.execute_query(cfg.fb['exportName'])
+with open('export_8.csv', 'w', newline='') as exportFile:
 	for line in xmlparse(dataReturn)[1][0][0]:
 		exportFile.write(line.text + "\r\n")
