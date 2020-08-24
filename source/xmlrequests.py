@@ -31,7 +31,7 @@ class AddInventory(Request):
 	def __init__(self, partnum, qty, uomid, cost, loctagnum, note="", tracking="", key=""):
 		Request.__init__(self, key)
 		if key == '':
-			raise TypeError("An API key was not provided (not enough aruments for " + 
+			raise TypeError("An API key was not provided (not enough arguments for " + 
 				            self.__class__.__name__ + " request)")
 		self.el_addinventoryrq = etree.SubElement(self.el_fbimsgsrq, 'AddInventoryRq')
 		self.el_partnum = etree.SubElement(self.el_addinventoryrq, 'PartNum')

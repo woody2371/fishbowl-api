@@ -6,11 +6,14 @@ import hashlib
 import datetime
 import base64
 import config as cfg
+import logging
+import traceback
 from lxml import etree
 
 import xmlrequests
 from statuscodes import getstatus
 
+logging.basicConfig(filename='FBAPI.log',level=logging.DEBUG,format='%(asctime)s %(message)s')
 
 class Fishbowlapi:
 	"""
@@ -151,9 +154,16 @@ def msg(msg):
 	msg_to_send = packed_length + msg
 	return msg_to_send
 
-# for testing:
+# connect to FB and export data as defined in the Data tab:
 stream = Fishbowlapi(cfg.fb['user'], cfg.fb['passwd'], cfg.fb['host'])
 dataReturn = stream.execute_query(cfg.fb['exportName'])
-with open('export_8.csv', 'w', newline='') as exportFile:
-	for line in xmlparse(dataReturn)[1][0][0]:
-		exportFile.write(line.text + "\r\n")
+
+with open('export.csv', 'w', newline='') as exportFile:
+        try:
+                if xmlparse(dataReturn)[1][0][0].tag == "Rows":
+                        for line in xmlparse(dataReturn)[1][0][0]:
+                                exportFile.write(line.text + "\r\n")
+                else:
+                        logging.error("Data export failed, instead of Rows dataReturn showed " + xmlparse(dataReturn)[1][0][0].tag)
+        except:
+                logging.error(traceback.format_exc())
