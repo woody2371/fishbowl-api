@@ -12,6 +12,7 @@ from lxml import etree
 
 import xmlrequests
 from statuscodes import getstatus
+import fishbowlFTP
 
 logging.basicConfig(filename='FBAPI.log',level=logging.DEBUG,format='%(asctime)s %(message)s')
 
@@ -171,3 +172,6 @@ with open('export.csv', 'w', newline='') as exportFile:
                         logging.error("Data export failed, instead of Rows dataReturn showed " + xmlparse(dataReturn)[1][0][0].tag)
         except:
                 logging.error(traceback.format_exc())
+
+
+fishbowlFTP.placeFile('export.csv')
