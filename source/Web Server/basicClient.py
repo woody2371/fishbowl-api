@@ -6,7 +6,7 @@ SEPARATOR = "<SEPARATOR>"
 BUFFER_SIZE = 4096 # send 4096 bytes each time step
 
 # the ip address or hostname of the server, the receiver
-host = "103.94.49.232"
+host = "<ip_address>"
 
 # the port, let's use 5409
 port = 5409
