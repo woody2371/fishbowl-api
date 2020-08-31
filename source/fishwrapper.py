@@ -5,7 +5,7 @@ import struct
 import hashlib
 import datetime
 import base64
-import config as cfg
+import configparser
 import logging
 import traceback
 from lxml import etree
@@ -134,7 +134,8 @@ class Fishbowlapi:
 		print(self.response)
 		return self.response
 	def execute_query(self, name):
-		""" Execute a Data query"""
+		""" Execute a Data query """
+		""" name variable is the full name of the query in the Data tab in Fishbowl """
 		xml = xmlrequests.ExecuteQuery(str(name), key=self.key).request
 		self.stream.send(msg(xml))
 		self.response = self.get_response()
@@ -154,9 +155,12 @@ def msg(msg):
 	msg_to_send = packed_length + msg
 	return msg_to_send
 
+cfg = configparser.ConfigParser()
+cfg.read('config.ini')
+
 # connect to FB and export data as defined in the Data tab:
-stream = Fishbowlapi(cfg.fb['user'], cfg.fb['passwd'], cfg.fb['host'])
-dataReturn = stream.execute_query(cfg.fb['exportName'])
+stream = Fishbowlapi(cfg['FB']['user'], cfg['FB']['passwd'], cfg['FB']['host'])
+dataReturn = stream.execute_query(cfg['FB']['exportName'])
 
 with open('export.csv', 'w', newline='') as exportFile:
         try:
