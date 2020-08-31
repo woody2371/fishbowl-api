@@ -5,6 +5,7 @@ cfg = configparser.ConfigParser()
 cfg.read('config.ini')
 
 ftp = FTP()
+ftp.set_pasv(False)
 ftp.connect(cfg['FTP']['host'],int(cfg['FTP']['port']))
 ftp.login(user=cfg['FTP']['user'], passwd = cfg['FTP']['passwd'])
 

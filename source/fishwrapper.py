@@ -174,4 +174,7 @@ with open('export.csv', 'w', newline='') as exportFile:
                 logging.error(traceback.format_exc())
 
 
-fishbowlFTP.placeFile('export.csv')
+try:
+        fishbowlFTP.placeFile('export.csv')
+except:
+        logging.error(traceback.format_exc())
