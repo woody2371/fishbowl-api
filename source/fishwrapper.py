@@ -14,7 +14,10 @@ import xmlrequests
 from statuscodes import getstatus
 import fishbowlFTP
 
-logging.basicConfig(filename='FBAPI.log',level=logging.DEBUG,format='%(asctime)s %(message)s')
+cfg = configparser.ConfigParser()
+cfg.read('config.ini')
+
+logging.basicConfig(filename=cfg['SYSTEM']['writepath']+'FBAPI.log',level=logging.DEBUG,format='%(asctime)s %(message)s')
 
 class Fishbowlapi:
 	"""
@@ -134,10 +137,18 @@ class Fishbowlapi:
 		self.response = self.get_response()
 		print(self.response)
 		return self.response
+	
 	def execute_query(self, name):
 		""" Execute a Data query """
 		""" name variable is the full name of the query in the Data tab in Fishbowl """
 		xml = xmlrequests.ExecuteQuery(str(name), key=self.key).request
+		self.stream.send(msg(xml))
+		self.response = self.get_response()
+		return self.response
+	
+	def logout(self):
+		""" Logout """
+		xml = xmlrequests.Logout(key=self.key).request
 		self.stream.send(msg(xml))
 		self.response = self.get_response()
 		return self.response
@@ -156,14 +167,13 @@ def msg(msg):
 	msg_to_send = packed_length + msg
 	return msg_to_send
 
-cfg = configparser.ConfigParser()
-cfg.read('config.ini')
-
 # connect to FB and export data as defined in the Data tab:
 stream = Fishbowlapi(cfg['FB']['user'], cfg['FB']['passwd'], cfg['FB']['host'])
 dataReturn = stream.execute_query(cfg['FB']['exportName'])
+stream.logout()
+stream.close()
 
-with open('export.csv', 'w', newline='') as exportFile:
+with open(cfg['SYSTEM']['writepath']+'export.csv', 'w', newline='') as exportFile:
         try:
                 if xmlparse(dataReturn)[1][0][0].tag == "Rows":
                         for line in xmlparse(dataReturn)[1][0][0]:
@@ -175,6 +185,6 @@ with open('export.csv', 'w', newline='') as exportFile:
 
 
 try:
-        fishbowlFTP.placeFile('export.csv')
+        fishbowlFTP.placeFile(cfg['SYSTEM']['writepath']+'export.csv','export.csv')
 except:
         logging.error(traceback.format_exc())

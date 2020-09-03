@@ -81,6 +81,16 @@ class GetPOList(Request):
 		xmlmsg = etree.tostring(self.el_fbixml, pretty_print=True)
 		self.request = xmlmsg
 
+class Logout(Request):
+	def __init__(self, key=""):
+		Request.__init__(self, key)
+		if key == '':
+			raise TypeError("An API key was not provided (not enough aruments for " + 
+				            self.__class__.__name__ + " request)")
+		self.el_logoutrq = etree.SubElement(self.el_fbimsgsrq, 'LogoutRqRq')
+		xmlmsg = etree.tostring(self.el_fbixml, pretty_print=True)
+		self.request = xmlmsg
+
 class ExecuteQuery(Request):
 	def __init__(self, name, key=""):
 		Request.__init__(self, key)
