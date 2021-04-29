@@ -23,4 +23,4 @@ stream.close()
 
 
 PyInstaller build instructions:
-Using command line: PyInstaller --onefile "C:\Dashboard\FishbowlDashboard\Github Repo\fishbowl-api\source\fishwrapper.py"
+Example command line: PyInstaller --paths "C:\Dashboard\FishbowlDashboard\Github Repo\fishbowl-api\source" --onefile --clean "C:\Dashboard\FishbowlDashboard\Github Repo\fishbowl-api\source\fishwrapper.py"

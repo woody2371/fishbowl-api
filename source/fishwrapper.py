@@ -13,6 +13,7 @@ from lxml import etree
 import xmlrequests
 from xmlrequests import Logout as XMLLogout
 from statuscodes import getstatus
+#Enable below import if you want to transmit the data via FTP
 #import fishbowlFTP
 
 cfg = configparser.ConfigParser()
@@ -188,6 +189,7 @@ if(cfg['FB']['WAexportEnabled'] == "yes"):
 
 
     try:
+            #Only enable below for passing data via FTP back to base
             #fishbowlFTP.placeFile(cfg['SYSTEM']['writepath']+'WAexport.csv','WAexport.csv')
             pass
     except:
@@ -210,6 +212,7 @@ if(cfg['FB']['QLDexportEnabled'] == "yes"):
 
 
     try:
+            #Only enable below for passing data via FTP back to base
             #fishbowlFTP.placeFile(cfg['SYSTEM']['writepath']+'QLDexport.csv','QLDexport.csv')
             pass
     except:
@@ -233,6 +236,7 @@ if(cfg['FB']['NSWexportEnabled'] == "yes"):
 
 
     try:
+            #Only enable below for passing data via FTP back to base
             #fishbowlFTP.placeFile(cfg['SYSTEM']['writepath']+'NSWexport.csv','NSWexport.csv')
             pass
     except:
@@ -256,6 +260,7 @@ if(cfg['FB']['SAexportEnabled'] == "yes"):
 
 
     try:
+            #Only enable below for passing data via FTP back to base
             #fishbowlFTP.placeFile(cfg['SYSTEM']['writepath']+'SAexport.csv','SAexport.csv')
             pass
     except:
@@ -279,6 +284,7 @@ if(cfg['FB']['VICexportEnabled'] == "yes"):
 
 
     try:
+            #Only enable below for passing data via FTP back to base
             #fishbowlFTP.placeFile(cfg['SYSTEM']['writepath']+'VICexport.csv','VICexport.csv')
             pass
     except:
