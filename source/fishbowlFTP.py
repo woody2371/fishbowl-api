@@ -2,7 +2,7 @@ from ftplib import FTP
 import configparser
 
 cfg = configparser.ConfigParser()
-cfg.read('config.ini')
+cfg.read('C:\Program Files\Fishwrapper\config.ini')
 
 ftp = FTP()
 ftp.set_pasv(True)

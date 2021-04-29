@@ -11,11 +11,12 @@ import traceback
 from lxml import etree
 
 import xmlrequests
+from xmlrequests import Logout as XMLLogout
 from statuscodes import getstatus
-import fishbowlFTP
+#import fishbowlFTP
 
 cfg = configparser.ConfigParser()
-cfg.read('config.ini')
+cfg.read('C:\Program Files\Fishwrapper\config.ini')
 
 logging.basicConfig(filename=cfg['SYSTEM']['writepath']+'FBAPI.log',level=logging.DEBUG,format='%(asctime)s %(message)s')
 
@@ -148,7 +149,7 @@ class Fishbowlapi:
 	
 	def logout(self):
 		""" Logout """
-		xml = xmlrequests.Logout(key=self.key).request
+		xml = XMLLogout(key=self.key).request
 		self.stream.send(msg(xml))
 		self.response = self.get_response()
 		return self.response
@@ -168,23 +169,118 @@ def msg(msg):
 	return msg_to_send
 
 # connect to FB and export data as defined in the Data tab:
-stream = Fishbowlapi(cfg['FB']['user'], cfg['FB']['passwd'], cfg['FB']['host'])
-dataReturn = stream.execute_query(cfg['FB']['exportName'])
-stream.logout()
-stream.close()
 
-with open(cfg['SYSTEM']['writepath']+'export.csv', 'w', newline='') as exportFile:
-        try:
-                if xmlparse(dataReturn)[1][0][0].tag == "Rows":
-                        for line in xmlparse(dataReturn)[1][0][0]:
-                                exportFile.write(line.text + "\r\n")
-                else:
-                        logging.error("Data export failed, instead of Rows dataReturn showed " + xmlparse(dataReturn)[1][0][0].tag)
-        except:
-                logging.error(traceback.format_exc())
+if(cfg['FB']['WAexportEnabled'] == "yes"):
+    stream = Fishbowlapi(cfg['FB']['user'], cfg['FB']['passwd'], cfg['FB']['host'])
+    dataReturn = stream.execute_query(cfg['FB']['WAexportName'])
+    stream.logout()
+    stream.close()
+
+    with open(cfg['SYSTEM']['writepath']+'WAexport.csv', 'w', newline='') as exportFile:
+            try:
+                    if xmlparse(dataReturn)[1][0][0].tag == "Rows":
+                            for line in xmlparse(dataReturn)[1][0][0]:
+                                    exportFile.write(line.text + "\r\n")
+                    else:
+                            logging.error("WA Data export failed, instead of Rows dataReturn showed " + xmlparse(dataReturn)[1][0][0].tag)
+            except:
+                    logging.error(traceback.format_exc())
 
 
-try:
-        fishbowlFTP.placeFile(cfg['SYSTEM']['writepath']+'export.csv','export.csv')
-except:
-        logging.error(traceback.format_exc())
+    try:
+            #fishbowlFTP.placeFile(cfg['SYSTEM']['writepath']+'WAexport.csv','WAexport.csv')
+            pass
+    except:
+            logging.error(traceback.format_exc())
+
+if(cfg['FB']['QLDexportEnabled'] == "yes"):
+    stream = Fishbowlapi(cfg['FB']['user'], cfg['FB']['passwd'], cfg['FB']['host'])
+    dataReturn = stream.execute_query(cfg['FB']['QLDexportName'])
+    stream.logout()
+    stream.close()
+    with open(cfg['SYSTEM']['writepath']+'QLDexport.csv', 'w', newline='') as exportFile:
+            try:
+                    if xmlparse(dataReturn)[1][0][0].tag == "Rows":
+                            for line in xmlparse(dataReturn)[1][0][0]:
+                                    exportFile.write(line.text + "\r\n")
+                    else:
+                            logging.error("QLD Data export failed, instead of Rows dataReturn showed " + xmlparse(dataReturn)[1][0][0].tag)
+            except:
+                    logging.error(traceback.format_exc())
+
+
+    try:
+            #fishbowlFTP.placeFile(cfg['SYSTEM']['writepath']+'QLDexport.csv','QLDexport.csv')
+            pass
+    except:
+            logging.error(traceback.format_exc())
+
+if(cfg['FB']['NSWexportEnabled'] == "yes"):
+    stream = Fishbowlapi(cfg['FB']['user'], cfg['FB']['passwd'], cfg['FB']['host'])
+    dataReturn = stream.execute_query(cfg['FB']['NSWexportName'])
+    stream.logout()
+    stream.close()
+
+    with open(cfg['SYSTEM']['writepath']+'NSWexport.csv', 'w', newline='') as exportFile:
+            try:
+                    if xmlparse(dataReturn)[1][0][0].tag == "Rows":
+                            for line in xmlparse(dataReturn)[1][0][0]:
+                                    exportFile.write(line.text + "\r\n")
+                    else:
+                            logging.error("NSW Data export failed, instead of Rows dataReturn showed " + xmlparse(dataReturn)[1][0][0].tag)
+            except:
+                    logging.error(traceback.format_exc())
+
+
+    try:
+            #fishbowlFTP.placeFile(cfg['SYSTEM']['writepath']+'NSWexport.csv','NSWexport.csv')
+            pass
+    except:
+            logging.error(traceback.format_exc())
+
+if(cfg['FB']['SAexportEnabled'] == "yes"):
+    stream = Fishbowlapi(cfg['FB']['user'], cfg['FB']['passwd'], cfg['FB']['host'])
+    dataReturn = stream.execute_query(cfg['FB']['SAexportName'])
+    stream.logout()
+    stream.close()
+
+    with open(cfg['SYSTEM']['writepath']+'SAexport.csv', 'w', newline='') as exportFile:
+            try:
+                    if xmlparse(dataReturn)[1][0][0].tag == "Rows":
+                            for line in xmlparse(dataReturn)[1][0][0]:
+                                    exportFile.write(line.text + "\r\n")
+                    else:
+                            logging.error("SA Data export failed, instead of Rows dataReturn showed " + xmlparse(dataReturn)[1][0][0].tag)
+            except:
+                    logging.error(traceback.format_exc())
+
+
+    try:
+            #fishbowlFTP.placeFile(cfg['SYSTEM']['writepath']+'SAexport.csv','SAexport.csv')
+            pass
+    except:
+            logging.error(traceback.format_exc())
+
+if(cfg['FB']['VICexportEnabled'] == "yes"):
+    stream = Fishbowlapi(cfg['FB']['user'], cfg['FB']['passwd'], cfg['FB']['host'])
+    dataReturn = stream.execute_query(cfg['FB']['VICexportName'])
+    stream.logout()
+    stream.close()
+
+    with open(cfg['SYSTEM']['writepath']+'VICexport.csv', 'w', newline='') as exportFile:
+            try:
+                    if xmlparse(dataReturn)[1][0][0].tag == "Rows":
+                            for line in xmlparse(dataReturn)[1][0][0]:
+                                    exportFile.write(line.text + "\r\n")
+                    else:
+                            logging.error("VIC Data export failed, instead of Rows dataReturn showed " + xmlparse(dataReturn)[1][0][0].tag)
+            except:
+                    logging.error(traceback.format_exc())
+
+
+    try:
+            #fishbowlFTP.placeFile(cfg['SYSTEM']['writepath']+'VICexport.csv','VICexport.csv')
+            pass
+    except:
+            logging.error(traceback.format_exc())
+

@@ -73,7 +73,7 @@ class GetPOList(Request):
 	def __init__(self, locationgroup, key=""):
 		Request.__init__(self, key)
 		if key == '':
-			raise TypeError("An API key was not provided (not enough aruments for " + 
+			raise TypeError("An API key was not provided (not enough arguments for " + 
 				            self.__class__.__name__ + " request)")
 		self.el_getpolistrq = etree.SubElement(self.el_fbimsgsrq, 'GetPOListRq')
 		self.el_locationgroup = etree.SubElement(self.el_getpolistrq, 'LocationGroup')
@@ -85,7 +85,7 @@ class Logout(Request):
 	def __init__(self, key=""):
 		Request.__init__(self, key)
 		if key == '':
-			raise TypeError("An API key was not provided (not enough aruments for " + 
+			raise TypeError("An API key was not provided (not enough arguments for " + 
 				            self.__class__.__name__ + " request)")
 		self.el_logoutrq = etree.SubElement(self.el_fbimsgsrq, 'LogoutRqRq')
 		xmlmsg = etree.tostring(self.el_fbixml, pretty_print=True)
@@ -95,7 +95,7 @@ class ExecuteQuery(Request):
 	def __init__(self, name, key=""):
 		Request.__init__(self, key)
 		if key == '':
-			raise TypeError("An API key was not provided (not enough aruments for " + 
+			raise TypeError("An API key was not provided (not enough arguments for " + 
 				            self.__class__.__name__ + " request)")
 		self.el_executequeryrq = etree.SubElement(self.el_fbimsgsrq, 'ExecuteQueryRq')
 		self.el_name = etree.SubElement(self.el_executequeryrq, 'Name')
